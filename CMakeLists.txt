@@ -3,4 +3,4 @@ project(SolidProject_Ex2)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SolidProject_Ex2 main.cpp Solver.h)
+add_executable(SolidProject_Ex2 main.cpp Solver.h StringReverser.h StringReverser.cpp)
