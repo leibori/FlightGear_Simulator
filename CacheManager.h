@@ -4,15 +4,15 @@
 
 #ifndef SOLIDPROJECT_EX2_CACHEMANAGER_H
 #define SOLIDPROJECT_EX2_CACHEMANAGER_H
-template <class question, class Answer>
+template <class P, class S>
 
 class CacheManager {
 
 public:
-    virtual bool isExist(const Question &item) const = 0;
+    virtual bool isExist(const P &problem) const = 0;
 
-    virtual Answer getAnswer(Question question) = 0;
+    virtual void savePS() = 0;
 
-    virtual bool addAnswerAndQuestion(Question question, Answer answer) = 0;
+    virtual S loadPS(P problem, S solution) = 0;
 };
 #endif //SOLIDPROJECT_EX2_CACHEMANAGER_H
