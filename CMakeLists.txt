@@ -1,7 +1,0 @@
-cmake_minimum_required(VERSION 3.13)
-project(SolidProject_Ex2)
-
-set(CMAKE_CXX_STANDARD 14)
-
-add_executable(SolidProject_Ex2 main.cpp Solver.h StringReverser.h StringReverser.cpp Server.h ClientHandler.h
-        MySerialServer.h MySerialServer.cpp MyTestClientHandler.h)
