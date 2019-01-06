@@ -9,9 +9,9 @@ template <class P, class S>
 class CacheManager {
 
 public:
-    virtual bool isExist(const P &problem) const = 0;
+    virtual bool isExist(const S &sol) const = 0;
 
-    virtual void savePS() = 0;
+    virtual void savePS(P problem, S solution) = 0;
 
     virtual S loadPS(P problem, S solution) = 0;
 };
