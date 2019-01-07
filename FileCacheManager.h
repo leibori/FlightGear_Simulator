@@ -25,8 +25,12 @@ public:
         }
     }
 
-    bool isExist(const S &sol) const override {
+    bool isExistSol(const S &sol) const override {
         return (allPS.count(sol) > 0);
+    }
+
+    bool isExistProb(const P &pob) const override {
+        return (allPS.count(pob) > 0);
     }
 
     void savePS(P problem, S solution) override {
@@ -45,23 +49,15 @@ public:
         dataFile.close();
     }
 
-    S loadPS(P problem, S solution) override{
-        if(isExist(solution)){
+    S getSol(P problem) override {
+        if (isExistProb(problem)) {
             return allPS[problem];
-        }
-        else{
-            throw runtime_error("No such solution");
+        } else {
+            throw runtime_error("No such solution to problem");
         }
     }
 
-private:
-    bool is_empty(const string &pFile) {
-        ifstream data;
-        data.open(pFile);
-        return data.peek() == std::ifstream::traits_type::eof();
-    }
-
-    void loadFromFile() {
+    void loadFromFile() override {
         string problem;
         string solution;
         ifstream data;
@@ -79,6 +75,15 @@ private:
 
         data.close();
     }
+
+private:
+    bool is_empty(const string &pFile) {
+        ifstream data;
+        data.open(pFile);
+        return data.peek() == std::ifstream::traits_type::eof();
+    }
+
+
 };
 
 #endif //SOLIDPROJECT_EX2_FILECACHEMANAGER_H
