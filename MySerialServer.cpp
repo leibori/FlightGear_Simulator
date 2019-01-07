@@ -1,6 +1,13 @@
 #include "MySerialServer.h"
 
-void MySerialServer::open(int port, ClientHandler clientHandler) {
+void MySerialServer::open(int port, MySerialServer::ClientHandler clientHandler) {
+    pthread_t pthread;
+    pthread_create(&pthread, nullptr, MySerialServer::start, (void*) (&port));
+}
+
+void MySerialServer::start(void* port) {
+    int* portNum = (int*) port;
+
     int sockfd, newsockfd, clilen;
     struct sockaddr_in serv_addr, cli_addr;
 
@@ -17,7 +24,7 @@ void MySerialServer::open(int port, ClientHandler clientHandler) {
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons((uint16_t)((size_t)port));
+    serv_addr.sin_port = htons((uint16_t)((size_t)*portNum));
 
     /* Now bind the host address using bind() call.*/
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
@@ -25,22 +32,24 @@ void MySerialServer::open(int port, ClientHandler clientHandler) {
         exit(1);
     }
 
-    listen(sockfd,5);
-    clilen = sizeof(cli_addr);
+    while(true) {
+        listen(sockfd,5);
+        clilen = sizeof(cli_addr);
 
-    newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, (socklen_t*)&clilen);
+        newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, (socklen_t*)&clilen);
 
-    if (newsockfd < 0) {
-        perror("Failed to accept server connection.");
-        exit(1);
-    }
+        if (newsockfd < 0) {
+            perror("Failed to accept server connection.");
+            exit(1);
+        }
 
-    do {
-        string data;
-        char buffer[2];
-        ssize_t bytes_read;
-        bytes_read = read(newsockfd, buffer, 1);
-        while (buffer[0] != *"\n") {
+        //communicate with the client
+        /*do {
+            string data;
+            char buffer[2];
+            ssize_t bytes_read;
+            bytes_read = read(newsockfd, buffer, 1);
+            while (buffer[0] != *"\n") {
             if (bytes_read < 0) {
                 __throw_bad_exception();
             }
@@ -48,5 +57,8 @@ void MySerialServer::open(int port, ClientHandler clientHandler) {
             bytes_read = read(newsockfd, buffer, 1);
         }
         //ClientHandler handle the input from the server and returns an appropriate output.
-    } while (true);
+        } while (data != "exit");*/
+    }
+
+    close(sockfd);
 }
