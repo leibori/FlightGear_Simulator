@@ -12,15 +12,11 @@ using namespace std;
 template<class P, class S>
 class Convertor {
 public:
-    /*
-     * convert problem to string
-     */
-    virtual string conProbToString(P problem) = 0;
 
     /*
      * convert string to problem
      */
-    virtual P conStringToProblem(string pro) = 0;
+    virtual P conVecStringToProblem(vector<string> pro) = 0;
 
     /*
      * convert solve to string
@@ -30,7 +26,6 @@ public:
     /*
      * convert string to solve
      */
-    virtual S conStringToSolve(string sol) = 0;
 
 };
 
