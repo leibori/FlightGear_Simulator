@@ -4,7 +4,7 @@
 
 #include "MyMatrix.h"
 
-MyMatrix::MyMatrix(vector<string> input, pair<int, int> goalSt, pair<int, int> initsta,
+MyMatrix::MyMatrix(vector<string> input, pair<int, int> initsta, pair<int, int> goalSt,
                    Convertor<vector<vector<int>>, string> *convertors) {
     this->conver = convertors;
     this->matrix = conver->conVecStringToProblem(input);
