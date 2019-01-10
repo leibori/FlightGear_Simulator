@@ -29,15 +29,15 @@ State<pair<int, int>> MyMatrix::getGoalState() {
 }
 
 vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int>> &s) {
-    int minCol = 0;
-    int maxCol = width - 1;
-    int minRow = 0;
-    int maxRow = length - 1;
+    int minimumCol = 0;
+    int maximumCol = width - 1;
+    int minimumRow = 0;
+    int maximumRow = length - 1;
     int i = s.getState().first;
     int j = s.getState().second;
     vector<State<pair<int, int>>> statesPosi;
 
-    if (i - 1 >= minRow) {
+    if (i - 1 >= minimumRow) {
 
         pair<int, int> up = make_pair(i - 1, j);
         State<pair<int, int>> upState = State<pair<int, int>>(s.getCost() + matrix[i - 1][j], up, &s);
@@ -46,7 +46,7 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
         }
     }
 
-    if (i + 1 <= maxRow) {
+    if (i + 1 <= maximumRow) {
         pair<int, int> down = make_pair(i + 1, j);
         State<pair<int, int>> downState = State<pair<int, int>>(s.getCost() + matrix[i + 1][j], down, &s);
         if (!downState.equal(s) && downState.getCost() != -1) {
@@ -54,7 +54,7 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
         }
     }
 
-    if (j - 1 >= minCol) {
+    if (j - 1 >= minimumCol) {
         pair<int, int> left = make_pair(i, j - 1);
         State<pair<int, int>> leftState = State<pair<int, int>>(s.getCost() + matrix[i][j - 1], left, &s);
         if (!leftState.equal(s) && leftState.getCost() != -1) {
@@ -62,7 +62,7 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
         }
     }
 
-    if ((j + 1) <= maxCol) {
+    if ((j + 1) <= maximumCol) {
         pair<int, int> right = make_pair(i, j + 1);
         State<pair<int, int>> rightState = State<pair<int, int>>(s.getCost() + matrix[i][j + 1], right, &s);
         if (!rightState.equal(s) && rightState.getCost() != -1) {
