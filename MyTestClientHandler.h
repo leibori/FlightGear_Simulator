@@ -2,6 +2,9 @@
 #define SOLIDPROJECT_EX2_MYTESTCLIENTHANDLER_H
 
 #include <iostream>
+#include <string.h>
+#include <unistd.h>
+#include <vector>
 
 #include "ClientHandler.h"
 #include "Solver.h"
@@ -15,7 +18,8 @@ public:
         solver = solver1;
         cacheManager = cacheManager1;
     }
-    void handleClient(stringstream input, stringstream output)
+    bool isNumber(string line);
+    void handleClient(int socket);
 };
 
 #endif //SOLIDPROJECT_EX2_MYTESTCLIENTHANDLER_H

@@ -7,7 +7,7 @@ using namespace std;
 
 class ClientHandler {
 public:
-    virtual void handleClient(stringstream input, stringstream output) = 0;
+    virtual void handleClient(void* socket) = 0;
 };
 
 #endif //PROJECT2_CLIENTHANDLER_H
