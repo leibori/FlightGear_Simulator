@@ -10,10 +10,8 @@ class State {
     T stateId;
     State<T> *cameForm;
 public:
-    explicit State(T state) : stateId(state) {
-        this->cost=0;
-        this->cameForm = nullptr;
-    }
+
+    State(double cost, T stateId, State<T> *cameForm) : cost(cost), stateId(stateId), cameForm(cameForm) {}
 
     double getCost() const {
         return cost;
