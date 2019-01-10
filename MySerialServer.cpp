@@ -1,12 +1,15 @@
 #include "MySerialServer.h"
 
-void MySerialServer::open(int port, MySerialServer::ClientHandler clientHandler) {
+void MySerialServer::open(int port, ClientHandler* clientHandler) {
+    auto serverArgs = new OpenServerArgs(port, clientHandler);
+
     pthread_t pthread;
-    pthread_create(&pthread, nullptr, MySerialServer::start, (void*) (&port));
+    pthread_create(&pthread, nullptr, MySerialServer::start, (void*) (serverArgs));
 }
 
-void MySerialServer::start(void* port) {
-    int* portNum = (int*) port;
+void* MySerialServer::start(void* serverArgs) {
+    int port = ((OpenServerArgs*) serverArgs)->getPort();
+    ClientHandler* clientHandler = ((OpenServerArgs*) serverArgs)->getClientHandler();
 
     int sockfd, newsockfd, clilen;
     struct sockaddr_in serv_addr, cli_addr;
@@ -24,7 +27,7 @@ void MySerialServer::start(void* port) {
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons((uint16_t)((size_t)*portNum));
+    serv_addr.sin_port = htons((uint16_t)((size_t)port));
 
     /* Now bind the host address using bind() call.*/
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
@@ -36,12 +39,25 @@ void MySerialServer::start(void* port) {
         listen(sockfd,5);
         clilen = sizeof(cli_addr);
 
+        timeval timeout;
+        timeout.tv_sec = 10;
+        timeout.tv_usec = 0;
+
+        setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+
         newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, (socklen_t*)&clilen);
 
         if (newsockfd < 0) {
-            perror("Failed to accept server connection.");
-            exit(1);
+            if (errno == EWOULDBLOCK)	{
+                cout << "timeout!" << endl;
+                exit(2);
+            }	else	{
+                perror("other error");
+                exit(3);
+            }
         }
+
+        clientHandler->handleClient(newsockfd);
 
         //communicate with the client
         /*do {
