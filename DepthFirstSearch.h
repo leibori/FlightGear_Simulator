@@ -12,7 +12,7 @@ class DepthFirstSearch {
 public:
     void adjustStateVectors(vector<State<pair<int, int>>> &visited, vector<State<pair<int, int>>> &neighbors);
     string makeDirections(State<pair<int, int>> *currentState);
-    string search(Searchable<pair<int, int>> searchable);
+    string search(Searchable<pair<int, int>> *searchable);
 };
 
 #endif //SOLIDPROJECT_EX2_BREADTHFIRSTSEARCH_H
