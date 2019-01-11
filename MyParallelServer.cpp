@@ -1,15 +1,10 @@
 #include "MyParallelServer.h"
 
 void MyParallelServer::open(int port, ClientHandler* clientHandler) {
-    auto serverArgs = new OpenServerArgs(port, clientHandler);
-
-    pthread_t pthread;
-    pthread_create(&pthread, nullptr, MyParallelServer::start, (void*) (serverArgs));
+    thread startServer(start, port, clientHandler);
 }
 
-void* MyParallelServer::start(void* serverArgs) {
-    int port = ((OpenServerArgs*) serverArgs)->getPort();
-    ClientHandler* clientHandler = ((OpenServerArgs*) serverArgs)->getClientHandler();
+void* MyParallelServer::start(int port, ClientHandler* clientHandler) {
 
     int sockfd, newsockfd, clilen;
     struct sockaddr_in serv_addr, cli_addr;
@@ -57,9 +52,6 @@ void* MyParallelServer::start(void* serverArgs) {
             }
         }
 
-        auto parallelClientArgs = new ParallelClientArgs(port);
-
-        pthread_t pthread;
-        pthread_create(&pthread, nullptr, ClientHandler::handleClient, (void*) (parallelClientArgs));
+        //thread clientThread (clientHandler->handleClient, port);
     }
 }
