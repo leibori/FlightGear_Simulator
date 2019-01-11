@@ -9,12 +9,13 @@
 #include "ClientHandler.h"
 #include "Solver.h"
 #include "CacheManager.h"
+#include "MyMatrix.h"
 
 class MyTestClientHandler : public ClientHandler {
-    Solver *solver;
-    CacheManager *cacheManager;
+    Solver<MyMatrix, string> *solver;
+    CacheManager<MyMatrix, string> *cacheManager;
 public:
-    MyTestClientHandler(Solver *solver1, CacheManager *cacheManager1) {
+    MyTestClientHandler(Solver<MyMatrix, string> *solver1, CacheManager<MyMatrix, string> *cacheManager1) {
         solver = solver1;
         cacheManager = cacheManager1;
     }
