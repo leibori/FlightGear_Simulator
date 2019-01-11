@@ -39,11 +39,12 @@ void MyTestClientHandler::handleClient(int socket) {
             continue;
         }
 
-        if (cacheManager->isExist(line)) {
+        /*if (cacheManager->isExist(line)) {
             solution = cacheManager->loadPS(line);
         } else {
             solution = solver->solve(line);
-        }
+        }*/
+
         if (write(socket, solution.c_str(), (int)(solution.length())) < 0) {
             throw "error writing data to socket";
         }
