@@ -1,5 +1,5 @@
 //
-// Created by edan on 1/5/19.
+// Created by ori on 1/5/19.
 //
 
 #ifndef SOLIDPROJECT_EX2_FILECACHEMANAGER_H
@@ -16,7 +16,7 @@ class FileCacheManager : public CacheManager<P, S> {
     static bool isUsed;
     string path;
     Convertor<P, S> *convertors;
-    unordered_map<P, S> allPS;
+    unordered_map<string, string> allPS;
 public:
     FileCacheManager(const string &path, Convertor<P, S> *convertors) : path(path), convertors(convertors) {
         if (!is_empty(path) && !isUsed) {
@@ -26,11 +26,15 @@ public:
     }
 
     bool isExistSol(const S &sol) const override {
-        return (allPS.count(sol) > 0);
+        return (allPS.count(convertors->conSolvToString(sol)) > 0);
     }
 
     bool isExistProb(const P &pob) const override {
-        return (allPS.count(pob) > 0);
+        return (allPS.count(convertors->conProbToString(pob)) > 0);
+    }
+    void mapAdding(string problem, string solution)  {
+        allPS[problem] = solution;
+
     }
 
     void savePS(P problem, S solution) override {
@@ -39,11 +43,11 @@ public:
         dataFile.open(this->path, ios_base::app);
 
         /* Adding to map. */
-        allPS[problem] = solution;
+        allPS[convertors->conProbToString(problem)] = convertors->conSolvToString(solution);
 
         /* Write to file */
-        dataFile << convertors->conProbToString(problem) << endl;
-        dataFile << convertors->conSolvToString(solution) << endl;
+        dataFile << problem << endl;
+        dataFile << solution << endl;
 
         /* Close file. */
         dataFile.close();
@@ -51,7 +55,7 @@ public:
 
     S getSol(P problem) override {
         if (isExistProb(problem)) {
-            return allPS[problem];
+            return convertors->conStringToSolve(allPS[problem]);
         } else {
             throw runtime_error("No such solution to problem");
         }
@@ -70,7 +74,7 @@ public:
         /* Read a line from file. */
         while (getline(data, problem)) {
             getline(data, solution);
-            allPS[convertors->conStringToProblem(problem)] = convertors->conStringToSolve(solution);
+            allPS[convertors->conProbToString(problem)] = solution;
         }
 
         data.close();
