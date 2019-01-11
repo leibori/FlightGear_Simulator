@@ -19,7 +19,7 @@ public:
 
     virtual State<T> getGoalState() = 0;
 
-    virtual vector<State<T>> getAllpossibleStates(State<T> &s) = 0;
+    virtual vector<State<T>> getAllpossibleStates(State<T> *s) = 0;
 
 };
 
