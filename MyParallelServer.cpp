@@ -1,10 +1,10 @@
-#include "MySerialServer.h"
+#include "MyParallelServer.h"
 
-void MySerialServer::open(int port, ClientHandler* clientHandler) {
-    thread startServer (start, port, clientHandler);
+void MyParallelServer::open(int port, ClientHandler* clientHandler) {
+    thread startServer(start, port, clientHandler);
 }
 
-void* MySerialServer::start(int port, ClientHandler* clientHandler) {
+void* MyParallelServer::start(int port, ClientHandler* clientHandler) {
 
     int sockfd, newsockfd, clilen;
     struct sockaddr_in serv_addr, cli_addr;
@@ -30,7 +30,7 @@ void* MySerialServer::start(int port, ClientHandler* clientHandler) {
         exit(1);
     }
 
-    while(true) {
+    while (true) {
         listen(sockfd,5);
         clilen = sizeof(cli_addr);
 
@@ -52,24 +52,6 @@ void* MySerialServer::start(int port, ClientHandler* clientHandler) {
             }
         }
 
-        clientHandler->handleClient(newsockfd);
-
-        //communicate with the client
-        /*do {
-            string data;
-            char buffer[2];
-            ssize_t bytes_read;
-            bytes_read = read(newsockfd, buffer, 1);
-            while (buffer[0] != *"\n") {
-            if (bytes_read < 0) {
-                __throw_bad_exception();
-            }
-            data += buffer[0];
-            bytes_read = read(newsockfd, buffer, 1);
-        }
-        //ClientHandler handle the input from the server and returns an appropriate output.
-        } while (data != "exit");*/
+        //thread clientThread (clientHandler->handleClient, port);
     }
-
-    //close(sockfd);
 }

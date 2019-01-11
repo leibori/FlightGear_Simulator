@@ -28,6 +28,6 @@ public:
 
     State<pair<int, int>> getGoalState() override;
 
-    vector<State<pair<int,int>>> getAllpossibleStates( State<pair<int, int>> &s) override;
+    vector<State<pair<int,int>>> getAllpossibleStates( State<pair<int, int>> *s) override;
 };
 #endif //SOLIDPROJECT_EX2_MYMATRIX_H
