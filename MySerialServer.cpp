@@ -1,10 +1,15 @@
 #include "MySerialServer.h"
 
 void MySerialServer::open(int port, ClientHandler* clientHandler) {
-    thread startServer (start, port, clientHandler);
+    auto serverArgs = new OpenServerArgs(port, clientHandler);
+
+    pthread_t pthread;
+    pthread_create(&pthread, nullptr, MySerialServer::start, (void*)(serverArgs));
 }
 
-void* MySerialServer::start(int port, ClientHandler* clientHandler) {
+void* MySerialServer::start(void* serverArgs) {
+    int port = ((OpenServerArgs*) serverArgs)->getPort();
+    ClientHandler* clientHandler = ((OpenServerArgs*) serverArgs)->getClientHandler();
 
     int sockfd, newsockfd, clilen;
     struct sockaddr_in serv_addr, cli_addr;
