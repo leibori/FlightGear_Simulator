@@ -1,7 +1,7 @@
 #include "BreadthFirstSearch.h"
 
-void BreadthFirstSearch::adjustStateVectors(vector<State<pair<int, int>>> &visited, vector<State<pair<int, int>>> &neighbors) {
-
+template <class T>
+void BreadthFirstSearch<T>::adjustStateVectors(vector<State<T>> &visited, vector<State<T>>  &neighbors) {
     for (int i = 0; i < visited.size(); i++) {
         for (int j = 0; j < neighbors.size(); j++) {
             if (visited[i].equal(neighbors[j])) {
@@ -15,53 +15,44 @@ void BreadthFirstSearch::adjustStateVectors(vector<State<pair<int, int>>> &visit
     }
 }
 
-string BreadthFirstSearch::makeDirections(State<pair<int, int>> *currentState) {
-    State<pair<int, int>> *former;
+template <class T>
+string BreadthFirstSearch<T>::makeDirections(State<T> *currentState) {
     string directions = "";
     if (currentState == nullptr) {
         return "No path available";
     }
     while (currentState->getCameForm() != nullptr) {
-        former = currentState->getCameForm();
-        if (former->getState().first > currentState->getState().first) {
-            directions = "Up," + directions;
-        } else if (former->getState().first < currentState->getState().first) {
-            directions = "Down," + directions;
-        } else if (former->getState().second > currentState->getState().second) {
-            directions = "Left," + directions;
-        } else if (former->getState().second < currentState->getState().second) {
-            directions = "Right," + directions;
-        }
-        currentState = former;
+        directions = currentState->getDirections() + directions;
+        currentState = currentState->getCameForm();
     }
     return directions.substr(0,directions.length() - 1);
 }
 
-string BreadthFirstSearch::search(Searchable<pair<int, int>> *searchable) {
-    vector<State<pair<int, int>>>::iterator iterator1;
-    vector<State<pair<int, int>>> closedStates;
-    vector<State<pair<int, int>>> neighbors;
-    vector<State<pair<int, int>>> stateQueue;
-    State<pair<int, int>> *shortest = nullptr;
+template <class T>
+string BreadthFirstSearch<T>::search(Searchable<T> *searchable) {
+    vector<State<T>> closedStates;
+    vector<State<T>> neighbors;
+    vector<State<T>> stateQueue;
+    State<T> *shortest = nullptr;
     double minCost;
     bool minFound = false;
     stateQueue.push_back(searchable->getInitialState());
     nodesEvaluated = 0;
     while (!stateQueue.empty()) {
         nodesEvaluated++;
-        State<pair<int, int>> currentState = stateQueue[0];
+        State<T> currentState = stateQueue[0];
         stateQueue.erase(stateQueue.begin());
         if (currentState.equal(searchable->getGoalState())) {
             if (!minFound) {
                 minFound = true;
                 minCost = currentState.getCost();
-                shortest = new State<pair<int, int>>(currentState);
+                shortest = new State<T>(currentState);
             } else if (currentState.getCost() < minCost) {
                 minCost = currentState.getCost();
-                shortest = new State<pair<int, int>>(currentState);
+                shortest = new State<T>(currentState);
             }
         } else {
-            State<pair<int, int>> *copy = new State<pair<int, int>>(currentState);
+            State<T> *copy = new State<T>(currentState);
             neighbors = searchable->getAllpossibleStates(copy);
             adjustStateVectors(closedStates, neighbors);
             adjustStateVectors(stateQueue, neighbors);
