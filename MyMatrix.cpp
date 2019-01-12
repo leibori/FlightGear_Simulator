@@ -41,41 +41,66 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
     if (i - 1 >= minimumRow) {
 
         pair<int, int> up = make_pair(i - 1, j);
-        State<pair<int, int>>upState = State<pair<int, int>>(s->getCost() + matrix[i - 1][j], up, s);
-         direc ="up";
+        State<pair<int, int>> upState = State<pair<int, int>>(s->getCost() + matrix[i - 1][j], up, s);
+        direc = "up";
         upState.setDirection(direc);
-        if (!upState.equal(*s->getCameForm()) && (upState.getCost() != -1)) {
-            statesPosi.push_back(upState);
+        if (s->getDirection() != "none") {
+            if (!upState.equal(*s->getCameForm()) && (matrix[i - 1][j] != -1)) {
+                statesPosi.push_back(upState);
+            }
+        } else {
+            if (matrix[i - 1][j] != -1) {
+                statesPosi.push_back(upState);
+            }
         }
+
     }
 
     if (i + 1 <= maximumRow) {
         pair<int, int> down = make_pair(i + 1, j);
         State<pair<int, int>> downState = State<pair<int, int>>(s->getCost() + matrix[i + 1][j], down, s);
-        direc ="down";
+        direc = "down";
         downState.setDirection(direc);
-        if (!downState.equal(*s->getCameForm())&& (downState.getCost() != -1)) {
-            statesPosi.push_back(downState);
+        if (s->getDirection() != "none") {
+            if (!downState.equal(*s->getCameForm()) && (matrix[i + 1][j] != -1)) {
+                statesPosi.push_back(downState);
+            }
+        } else {
+            if (matrix[i + 1][j] != -1) {
+                statesPosi.push_back(downState);
+            }
         }
     }
 
     if (j - 1 >= minimumCol) {
         pair<int, int> left = make_pair(i, j - 1);
         State<pair<int, int>> leftState = State<pair<int, int>>(s->getCost() + matrix[i][j - 1], left, s);
-        direc ="left";
+        direc = "left";
         leftState.setDirection(direc);
-        if (!leftState.equal(*s->getCameForm()) && (leftState.getCost() != -1)) {
-            statesPosi.push_back(leftState);
+        if (s->getDirection() != "none") {
+            if (!leftState.equal(*s->getCameForm()) && (matrix[i][j - 1] != -1)) {
+                statesPosi.push_back(leftState);
+            }
+        } else {
+            if (matrix[i][j - 1] != -1) {
+                statesPosi.push_back(leftState);
+            }
         }
     }
 
     if ((j + 1) <= maximumCol) {
         pair<int, int> right = make_pair(i, j + 1);
         State<pair<int, int>> rightState = State<pair<int, int>>(s->getCost() + matrix[i][j + 1], right, s);
-        direc ="right";
+        direc = "right";
         rightState.setDirection(direc);
-        if (!rightState.equal(*s->getCameForm()) && (rightState.getCost() != -1)) {
-            statesPosi.push_back(rightState);
+        if (s->getDirection() != "none") {
+            if (!rightState.equal(*s->getCameForm()) && (matrix[i][j + 1] != -1)) {
+                statesPosi.push_back(rightState);
+            }
+        } else {
+            if (matrix[i][j + 1] != -1) {
+                statesPosi.push_back(rightState);
+            }
         }
     }
 
