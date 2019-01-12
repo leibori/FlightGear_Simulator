@@ -31,7 +31,7 @@ public:
             return "No path available";
         }
         while (currentState->getCameForm() != nullptr) {
-            directions = currentState->getDirections() + directions;
+            directions = currentState->getDirection() + directions;
             currentState = currentState->getCameForm();
         }
         return directions.substr(0,directions.length() - 1);
