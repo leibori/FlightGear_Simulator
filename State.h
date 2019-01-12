@@ -15,7 +15,7 @@ class State {
 public:
 
     State(double cost, T stateId, State<T> *cameForm) : cost(cost), stateId(stateId), cameForm(cameForm) {
-        this->direction = nullptr;
+        this->direction = "none";
     }
 
     double getCost() const {

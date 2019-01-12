@@ -44,7 +44,7 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
         State<pair<int, int>>upState = State<pair<int, int>>(s->getCost() + matrix[i - 1][j], up, s);
          direc ="up";
         upState.setDirection(direc);
-        if (upState.equal(*s->getCameForm())== 0 && upState.getCost() != -1) {
+        if (!upState.equal(*s->getCameForm()) && (upState.getCost() != -1)) {
             statesPosi.push_back(upState);
         }
     }
@@ -54,7 +54,7 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
         State<pair<int, int>> downState = State<pair<int, int>>(s->getCost() + matrix[i + 1][j], down, s);
         direc ="down";
         downState.setDirection(direc);
-        if (downState.equal(*s->getCameForm())== 0 && downState.getCost() != -1) {
+        if (!downState.equal(*s->getCameForm())&& (downState.getCost() != -1)) {
             statesPosi.push_back(downState);
         }
     }
@@ -64,7 +64,7 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
         State<pair<int, int>> leftState = State<pair<int, int>>(s->getCost() + matrix[i][j - 1], left, s);
         direc ="left";
         leftState.setDirection(direc);
-        if (leftState.equal(*s->getCameForm())== 0 && leftState.getCost() != -1) {
+        if (!leftState.equal(*s->getCameForm()) && (leftState.getCost() != -1)) {
             statesPosi.push_back(leftState);
         }
     }
@@ -74,7 +74,7 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
         State<pair<int, int>> rightState = State<pair<int, int>>(s->getCost() + matrix[i][j + 1], right, s);
         direc ="right";
         rightState.setDirection(direc);
-        if (rightState.equal(*s->getCameForm())== 0 && rightState.getCost() != -1) {
+        if (!rightState.equal(*s->getCameForm()) && (rightState.getCost() != -1)) {
             statesPosi.push_back(rightState);
         }
     }
