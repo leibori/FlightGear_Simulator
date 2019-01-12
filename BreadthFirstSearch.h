@@ -7,12 +7,13 @@
 #include "Searchable.h"
 #include "State.h"
 
+template <class T>
 class BreadthFirstSearch {
     int nodesEvaluated = 0;
 public:
-    void adjustStateVectors(vector<State<pair<int, int>>> &visited, vector<State<pair<int, int>>> &neighbors);
-    string makeDirections(State<pair<int, int>> *currentState);
-    string search(Searchable<pair<int, int>> *searchable);
+    void adjustStateVectors(vector<State<T>> &visited, vector<State<T>> &neighbors);
+    string makeDirections(State<T> *currentState);
+    string search(Searchable<T> *searchable);
 };
 
 #endif //SOLIDPROJECT_EX2_BREADTHFIRSTSEARCH_H
