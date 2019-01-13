@@ -1,14 +1,18 @@
 #include <iostream>
 #include <string>
 
-#include "State.h"
 #include <set>
 #include <string>
 #include "MyMatrix.h"
 #include "MatrixConvertor.h"
 #include "Searcher.h"
+#include "State.h"
 #include "Convertor.h"
 #include "Searchable.h"
+
+#include "DepthFirstSearch.h"
+#include "BreadthFirstSearch.h"
+
 using namespace std;
 int main() {
 
@@ -20,8 +24,12 @@ int main() {
     pair<int, int> enter = make_pair(0,0);
     pair<int, int> exit = make_pair(2,2);
     Convertor<vector<vector<int>>,string>* convertors = new MatrixConvertor() ;
-    //string move[4] = {"Up","Down","Left","Right"};
     Searchable<pair<int, int>>* mt = new MyMatrix(matrix,enter,exit,convertors);
+    //string move[4] = {"Up","Down","Left","Right"};
+
+
+    BreadthFirstSearch<pair<int, int>> bfs;
+    cout << bfs.search(mt) << endl;
     //State<vector<int>> s = State<vector<int>>(enter, 3, NULL);
     //list<State<vector<int>>> x;
     //x = mt->getAllPossibleStates(s);

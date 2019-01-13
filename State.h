@@ -11,12 +11,10 @@ class State {
     double cost{};
     T stateId;
     State<T> *cameForm;
-    string direction;
+    string direction = "none";
 public:
 
-    State(double cost, T stateId, State<T> *cameForm) : cost(cost), stateId(stateId), cameForm(cameForm) {
-        this->direction = "none";
-    }
+    State(double cost, T stateId, State<T> *cameForm) : cost(cost), stateId(stateId), cameForm(cameForm) {}
 
     double getCost() const {
         return cost;
