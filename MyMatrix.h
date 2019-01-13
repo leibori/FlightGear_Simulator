@@ -22,12 +22,12 @@ public:
     MyMatrix(vector<string> input, pair<int, int> initState,  pair<int, int> goalState,
              Convertor<vector<vector<int>>, string> *convertors );
 
-    State<pair<int, int>> getInitialState() override;
+    State<pair<int, int>>* getInitialState() override;
 
     bool isGoalState(const State<pair<int, int>> &st) override;
 
-    State<pair<int, int>> getGoalState() override;
+    State<pair<int, int>> *getGoalState() override;
 
-    vector<State<pair<int,int>>> getAllpossibleStates( State<pair<int, int>> *s) override;
+    vector<State<pair<int,int>>*> getAllpossibleStates( State<pair<int, int>> *s) override;
 };
 #endif //SOLIDPROJECT_EX2_MYMATRIX_H

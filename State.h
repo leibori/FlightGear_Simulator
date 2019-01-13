@@ -49,8 +49,8 @@ public:
         this->direction = direc;
     }
 
-    bool equal (State<T> state){
-        return this->stateId == state.stateId;
+    bool equal (State<T> *state){
+        return this->stateId == state->stateId;
     }
 };
 #endif //SOLIDPROJECT_EX2_STATE_H

@@ -14,8 +14,8 @@ MyMatrix::MyMatrix(vector<string> input, pair<int, int> initsta, pair<int, int> 
     this->initState = initsta;
 }
 
-State<pair<int, int>> MyMatrix::getInitialState() {
-    State<pair<int, int>> sta = State<pair<int, int>>(0, initState, nullptr);
+State<pair<int, int>> *MyMatrix::getInitialState() {
+    State<pair<int, int>> *sta = new State<pair<int, int>>(0, initState, nullptr);
     return sta;
 }
 
@@ -23,12 +23,12 @@ bool MyMatrix::isGoalState(const State<pair<int, int>> &st) {
     return st.getState() == goalState;
 }
 
-State<pair<int, int>> MyMatrix::getGoalState() {
-    State<pair<int, int>> goa = State<pair<int, int>>(0, goalState, nullptr);
+State<pair<int, int>> *MyMatrix::getGoalState() {
+    State<pair<int, int>> *goa = new State<pair<int, int>>(0, goalState, nullptr);
     return goa;
 }
 
-vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int>> *s) {
+vector<State<pair<int, int>>*> MyMatrix::getAllpossibleStates(State<pair<int, int>> *s) {
     int minimumCol = 0;
     int maximumCol = width - 1;
     int minimumRow = 0;
@@ -36,16 +36,16 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
     string direc;
     int i = s->getState().first;
     int j = s->getState().second;
-    vector<State<pair<int, int>>> statesPosi;
+    vector<State<pair<int, int>>*> statesPosi;
 
     if (i - 1 >= minimumRow) {
 
         pair<int, int> up = make_pair(i - 1, j);
-        State<pair<int, int>> upState = State<pair<int, int>>(s->getCost() + matrix[i - 1][j], up, s);
+        State<pair<int, int>>* upState = new State<pair<int, int>>(s->getCost() + matrix[i - 1][j], up, s);
         direc = "up";
-        upState.setDirection(direc);
+        upState->setDirection(direc);
         if (s->getDirection() != "none") {
-            if (!upState.equal(*s->getCameForm()) && (matrix[i - 1][j] != -1)) {
+            if (!upState->equal(s->getCameForm()) && (matrix[i - 1][j] != -1)) {
                 statesPosi.push_back(upState);
             }
         } else {
@@ -58,11 +58,11 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
 
     if (i + 1 <= maximumRow) {
         pair<int, int> down = make_pair(i + 1, j);
-        State<pair<int, int>> downState = State<pair<int, int>>(s->getCost() + matrix[i + 1][j], down, s);
+        State<pair<int, int>>* downState = new State<pair<int, int>>(s->getCost() + matrix[i + 1][j], down, s);
         direc = "down";
-        downState.setDirection(direc);
+        downState->setDirection(direc);
         if (s->getDirection() != "none") {
-            if (!downState.equal(*s->getCameForm()) && (matrix[i + 1][j] != -1)) {
+            if (!downState->equal(s->getCameForm()) && (matrix[i + 1][j] != -1)) {
                 statesPosi.push_back(downState);
             }
         } else {
@@ -74,11 +74,11 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
 
     if (j - 1 >= minimumCol) {
         pair<int, int> left = make_pair(i, j - 1);
-        State<pair<int, int>> leftState = State<pair<int, int>>(s->getCost() + matrix[i][j - 1], left, s);
+        State<pair<int, int>>* leftState = new State<pair<int, int>>(s->getCost() + matrix[i][j - 1], left, s);
         direc = "left";
-        leftState.setDirection(direc);
+        leftState->setDirection(direc);
         if (s->getDirection() != "none") {
-            if (!leftState.equal(*s->getCameForm()) && (matrix[i][j - 1] != -1)) {
+            if (!leftState->equal(s->getCameForm()) && (matrix[i][j - 1] != -1)) {
                 statesPosi.push_back(leftState);
             }
         } else {
@@ -90,11 +90,11 @@ vector<State<pair<int, int>>> MyMatrix::getAllpossibleStates(State<pair<int, int
 
     if ((j + 1) <= maximumCol) {
         pair<int, int> right = make_pair(i, j + 1);
-        State<pair<int, int>> rightState = State<pair<int, int>>(s->getCost() + matrix[i][j + 1], right, s);
+        State<pair<int, int>>* rightState = new State<pair<int, int>>(s->getCost() + matrix[i][j + 1], right, s);
         direc = "right";
-        rightState.setDirection(direc);
+        rightState->setDirection(direc);
         if (s->getDirection() != "none") {
-            if (!rightState.equal(*s->getCameForm()) && (matrix[i][j + 1] != -1)) {
+            if (!rightState->equal(s->getCameForm()) && (matrix[i][j + 1] != -1)) {
                 statesPosi.push_back(rightState);
             }
         } else {
