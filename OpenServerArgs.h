@@ -3,16 +3,17 @@
 
 #include "ClientHandler.h"
 
+template <class P, class S>
 class OpenServerArgs {
-    ClientHandler *clientHandler;
+    ClientHandler<P,S> *clientHandler;
     int port;
 public:
-    OpenServerArgs(int port1, ClientHandler *clientHandler1) {
+    OpenServerArgs(int port1, ClientHandler<P,S> *clientHandler1) {
         clientHandler = clientHandler1;
         port = port1;
     }
     int getPort() { return port; }
-    ClientHandler* getClientHandler() { return clientHandler; }
+    ClientHandler<P,S>* getClientHandler() { return clientHandler; }
 };
 
 #endif //SOLIDPROJECT_EX2_OPENSERVERARGS_H
