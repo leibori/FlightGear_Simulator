@@ -6,20 +6,24 @@
 #define SOLIDPROJECT_EX2_MATRIXCONVERTOR_H
 #include <vector>
 #include "Convertor.h"
+#include "MyMatrix.h"
+#include "Searchable.h"
 using namespace std;
-class MatrixConvertor : public Convertor <vector<vector<int>>,string>{
-    vector<vector<int>> matrix;
-    int length;
-    int width;
+class MatrixConvertor : public Convertor <Searchable<pair<int, int>>* ,string>{
 public:
     MatrixConvertor();
 
-    vector<string>splitIt(string str, string token);
+    Searchable<pair<int, int>>* conVecStringToProblem(vector<string> pro) override;
 
-    vector<vector<int>> conVecStringToProblem(vector<string> pro) override;
+    string conVecProblemToString(Searchable<pair<int, int>>* problem) override;
 
     string conSolvToString(string solve) override;
 
+    string conStringToSol(string solve) override;
+
+private:
+//split by specific token
+    vector<string> splitIt(string str, string token) ;
 
 };
 #endif //SOLIDPROJECT_EX2_MATRIXCONVERTOR_H

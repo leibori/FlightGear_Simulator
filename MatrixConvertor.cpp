@@ -3,6 +3,30 @@
 //
 
 #include "MatrixConvertor.h"
+
+Searchable<pair<int, int>>* MatrixConvertor::conVecStringToProblem(vector<string> pro) {
+    MyMatrix *matrix = new MyMatrix(pro);
+    return matrix;
+}
+
+string MatrixConvertor::conSolvToString(string solve) {
+    return solve;
+}
+
+string MatrixConvertor::conVecProblemToString(Searchable<pair<int, int>>* problem) {
+    vector<string> temp = problem->getOriginalVector();
+    string toReturn;
+    for (auto i : temp) {
+        toReturn.append(i);
+        toReturn.append("|");
+    }
+    string st = toReturn.substr(0, toReturn.size() - 1);
+    return st;
+}
+
+string MatrixConvertor::conStringToSol(string solve) {
+    return solve;
+}
 //split by specific token
 vector<string>MatrixConvertor:: splitIt(string str, string token) {
     vector<string> result;
@@ -20,23 +44,6 @@ vector<string>MatrixConvertor:: splitIt(string str, string token) {
     return result;
 }
 
-vector<vector<int>> MatrixConvertor::conVecStringToProblem(vector<string> pro) {
-    for (auto &it : pro) {
-        vector<int> line;
-        vector<string> afterSplit = splitIt(it,",");
-        for (auto &it : afterSplit) {
-            line.push_back(std::stoi(it));
-        }
-        matrix.push_back(line);
-    }
-    return matrix;
-}
-
-string MatrixConvertor::conSolvToString(string solve) {
-    return solve;
-}
-
 MatrixConvertor::MatrixConvertor() = default;
-
 
 

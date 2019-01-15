@@ -19,13 +19,22 @@ public:
     virtual P conVecStringToProblem(vector<string> pro) = 0;
 
     /*
+    * convert problem to string
+    */
+    virtual string conVecProblemToString(P problem) = 0;
+
+
+    /*
      * convert solve to string
      */
     virtual string conSolvToString(S solve) = 0;
-
     /*
-     * convert string to solve
-     */
+   * convert string to solve
+   */
+    virtual S conStringToSol(string solve) = 0;
+
+
+
 
 };
 

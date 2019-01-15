@@ -11,7 +11,7 @@ template <class T>
 class CompForMult {
 public:
     /*checking if first state is smaller then the second one*/
-    bool operator()(State<T>* const st,State<T>* const sta)const{
+    bool operator()(State<T>* st,State<T>*  sta){
         return st->getCost()< sta->getCost();
     }
 };

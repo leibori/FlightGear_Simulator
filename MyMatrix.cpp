@@ -4,14 +4,27 @@
 
 #include "MyMatrix.h"
 
-MyMatrix::MyMatrix(vector<string> input, pair<int, int> initsta, pair<int, int> goalSt,
-                   Convertor<vector<vector<int>>, string> *convertors) {
-    this->conver = convertors;
-    this->matrix = conver->conVecStringToProblem(input);
+MyMatrix::MyMatrix(vector<string> getIt) {
+
+    vector<string> start = splitIt(getIt[getIt.size()-2],",");
+    vector<string >end=  splitIt(getIt[getIt.size()-1],",");
+    this->initState =  std::make_pair(stoi(start[0]), stoi(start[1]));
+    this->goalState =std::make_pair(stoi(end[0]), stoi(end[1]));
+    vector<string> prop =getIt;
+    prop.erase(prop.end()-2, prop.end());
+    vector<vector<int>> matTemp;
+    for (auto iter = prop.begin(); iter != prop.end(); iter++) {
+        vector<int> line;
+        vector<string> afterSplit = splitIt(*iter,",");
+        for (auto &it : afterSplit) {
+            line.push_back(std::stoi(it));
+        }
+        matTemp.push_back(line);
+    }
+    this->matrix = matTemp;
     this->length = matrix.size();
     this->width = matrix[0].size();
-    this->goalState = goalSt;
-    this->initState = initsta;
+    this->original = getIt;
 }
 
 State<pair<int, int>> *MyMatrix::getInitialState() {
@@ -37,7 +50,6 @@ vector<State<pair<int, int>>*> MyMatrix::getAllpossibleStates(State<pair<int, in
     int i = s->getState().first;
     int j = s->getState().second;
     vector<State<pair<int, int>>*> statesPosi;
-
     if (i - 1 >= minimumRow) {
 
         pair<int, int> up = make_pair(i - 1, j);
@@ -106,5 +118,26 @@ vector<State<pair<int, int>>*> MyMatrix::getAllpossibleStates(State<pair<int, in
 
     return statesPosi;
 }
+//split by specific token
+vector<string>MyMatrix:: splitIt(string str, string token) {
+    vector<string> result;
+    while (str.size()) {
+        int index = str.find(token);
+        if (index != string::npos) {
+            result.push_back(str.substr(0, index));
+            str = str.substr(index + token.size());
+            if (str.size() == 0)result.push_back(str);
+        } else {
+            result.push_back(str);
+            str = "";
+        }
+    }
+    return result;
+}
+
+vector<string> MyMatrix::getOriginalVector() {
+    return original;
+}
+
 
 

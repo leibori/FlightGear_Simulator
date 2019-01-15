@@ -1,10 +1,9 @@
 //
-// Created by ori on 1/12/19.
+// Created by ori on 1/14/19.
 //
 
-#ifndef SOLIDPROJECT_EX2_BESTFIRSTSEARCH_H
-#define SOLIDPROJECT_EX2_BESTFIRSTSEARCH_H
-
+#ifndef SOLIDPROJECT_EX2_ASTAR_H
+#define SOLIDPROJECT_EX2_ASTAR_H
 #include "algorithm"
 #include <list>
 #include "CompForMult.h"
@@ -13,7 +12,7 @@
 using namespace std;
 
 template<class S, class T>
-class BestFirstSearch : public InCommonSearcher<S, T> {
+class Astar : public InCommonSearcher<S,T>   {
 public:
     S search(Searchable<T> *searchable) override {
         this->addToOpenList(searchable->getInitialState());
@@ -28,7 +27,16 @@ public:
             for (auto iter = successors.begin(); iter != successors.end(); iter++) {
                 if (!closeContains(*iter, this->closed) && !this->contains(*iter)) {
                     State<T> *s = *iter;
-                    //s->setCameForm(father);
+                    T nowS = s->getState();
+                    T goalS = searchable->getGoalState()->getState();
+                   auto manhattan = manhattanDistance(nowS,goalS);
+                    auto costIt = s->getCost();
+                    if (s->getCameForm()->getDirection() != "none"){
+                        auto fatherManhattan = manhattanDistance(s->getCameForm()->getState(),goalS);
+                        SetAstarCost(manhattan, static_cast<int>(s->getCost()), fatherManhattan, s);
+                    } else{
+                        SetAstarCost(manhattan, static_cast<int>(s->getCost()), 0, s);
+                    }
                     this->addToOpenList(s);
                 } else if (!closeContains(*iter, this->closed)) {
                     this->optionMinimum(*iter);
@@ -37,8 +45,7 @@ public:
         }
     }
 
-
-    virtual bool closeContains(State<T> *stateIt, vector<State<T>*> close) {
+    bool closeContains(State<T> *stateIt, vector<State<T>*> close) {
         for (auto it = close.begin(); it != close.end(); it++) {
             State<T> *s = *it;
             if (s->equal(stateIt)) {
@@ -47,6 +54,11 @@ public:
         }
         return false;
     }
+    auto manhattanDistance (T begin ,T end ){
+        return abs(get<0>(end)-get<0>(begin)) + abs(get<1>(end)-get<1>(begin));
+    }
+    void SetAstarCost(int distance,int cost, int upperDistance,State<T> *stateIt){
+        stateIt->setCost(distance + cost - upperDistance);
+    }
 };
-
-#endif //SOLIDPROJECT_EX2_BESTFIRSTSEARCH_H
+#endif //SOLIDPROJECT_EX2_ASTAR_H

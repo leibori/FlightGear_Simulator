@@ -28,7 +28,7 @@ public:
         return stateId;
     }
 
-    void setState(T state) {
+    void setState(T* state) {
         State::stateId = state;
     }
 

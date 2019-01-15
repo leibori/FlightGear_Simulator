@@ -21,6 +21,9 @@ public:
 
     virtual vector<State<T>*> getAllpossibleStates(State<T> *s) = 0;
 
+    virtual vector <string> getOriginalVector()=0;
+
+
 };
 
 #endif //SOLIDPROJECT_EX2_SEARCHABLE_H
