@@ -5,6 +5,7 @@
 
 using namespace std;
 
+template <class P, class S>
 class ClientHandler {
 public:
     virtual void handleClient(int socket) = 0;

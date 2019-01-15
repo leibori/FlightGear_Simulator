@@ -11,11 +11,12 @@
 #include "Solver.h"
 #include "CacheManager.h"
 #include "MyMatrix.h"
+#include "SearchableSolver.h"
 
 using namespace std;
 
 template <class P, class S>
-class MyTestClientHandler : public ClientHandler {
+class MyTestClientHandler : public ClientHandler<P,S> {
     Convertor<P,S> *convertor;
     Solver<P,S> *solver;
     CacheManager<P,S> *cacheManager;

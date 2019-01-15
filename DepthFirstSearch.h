@@ -72,6 +72,8 @@ public:
         }
         return makeDirections(shortest);
     }
+
+    int getNodesEvaluated() const { return nodesEvaluated; }
 };
 
 #endif //SOLIDPROJECT_EX2_BREADTHFIRSTSEARCH_H
