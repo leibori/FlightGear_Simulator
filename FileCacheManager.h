@@ -8,46 +8,41 @@
 #include <string>
 #include <unordered_map>
 #include <fstream>
+#include <mutex>
+#include <sstream>
 #include "CacheManager.h"
 #include "Convertor.h"
 
+//mutex write;
+
 template<typename P, typename S>
 class FileCacheManager : public CacheManager<P, S> {
-    static bool isUsed;
     string path;
     Convertor<P, S> *convertors;
-    unordered_map<string, string> allPS;
-    P problem;
-    S solution;
+    unordered_map <string, string> allPS;
 
 public:
-    virtual ~FileCacheManager() {
 
-    }
-
-    FileCacheManager(const string &path, Convertor<P, S> *convertors, P problem, S solution) : path(path),
-                                                                                               convertors(convertors),
-                                                                                               problem(problem),
-                                                                                               solution(solution) {
-        if (!is_empty(path) && !isUsed) {
-            loadFromFile();
-            isUsed = true;
-        }
-        if (!isExistSol(solution)){
-            savePS(problem,solution);
-        }
+    FileCacheManager(const string &path, Convertor<P, S> *convertors) : path(path),
+                                                                        convertors(convertors) {
+        loadFromFile();
+        /* if (!isExistSol(solution)){
+             savePS(problem,solution);
+         }*/
     }
 
 
-    bool isExistSol(const S &sol) const override {
-        return (allPS.count(convertors->conSolvToString(this->solution)) > 0);
+    bool isExistSol(const P &pob) const override {
+        string psv = convertors->conVecProblemToString(pob);
+        return allPS.find(psv) != allPS.end();
     }
 
     bool isExistProb(const P &pob) const override {
-        return (allPS.count(convertors->conProbToString(this->problem)) > 0);
+        string psv = convertors->conVecProblemToString(pob);
+        return allPS.find(psv) != allPS.end();
     }
 
-    void mapAdding(string problem, string solution) {
+    void mapAdding(P problem, S solution) {
         string problemS = convertors->conVecProblemToString(problem);
         string solveS = convertors->conSolvToString(solution);
         allPS[problemS] = solveS;
@@ -55,44 +50,49 @@ public:
     }
 
     void savePS(P problem, S solution) override {
+        //      write.lock();
         /* Create file . */
-        ofstream dataFile;
-        dataFile.open(this->path, ios_base::app);
+        ofstream dataFile(this->path, ios::app);
 
         /* Adding to map. */
         mapAdding(problem, solution);
         /* Write to file */
         string problemS = convertors->conVecProblemToString(problem);
         string solveS = convertors->conSolvToString(solution);
-        dataFile << problemS << endl;
-        dataFile << solveS << endl;
+        dataFile << problemS << '$' << solveS << endl;
 
         /* Close file. */
         dataFile.close();
+        //    write.unlock();
     }
 
     S getSol(P problem) override {
+        string problemS = convertors->conVecProblemToString(problem);
         if (isExistProb(problem)) {
-            return convertors->conStringToSolve(allPS[problem]);
+            return allPS[problemS];
         } else {
-            throw runtime_error("No such solution to problem");
+            string answer = "NO problem Exist";
+            return answer;
         }
     }
 
     void loadFromFile() override {
-        string problem;
-        string solution;
-        ifstream data;
-        data.open(this->path);
+        string prob;
+        string solu;
+        ifstream data(this->path);
+        stringstream stringstream1;
+        string buffer;
 
         if (!data.good()) {
             return;
         }
-
+        vector<string> vector;
         /* Read a line from file. */
-        while (getline(data, problem)) {
-            getline(data, solution);
-            allPS[problem] = solution;
+        while (std::getline(data, buffer)) {
+//            stringstream1.str(buffer);
+            vector = splitIt(buffer, "$");
+
+            allPS[vector[0]] = vector[1];
         }
 
         data.close();
@@ -105,6 +105,21 @@ private:
         return data.peek() == std::ifstream::traits_type::eof();
     }
 
+    vector<string> splitIt(string str, string token) {
+        vector<string> result;
+        while (str.size()) {
+            int index = str.find(token);
+            if (index != string::npos) {
+                result.push_back(str.substr(0, index));
+                str = str.substr(index + token.size());
+                if (str.size() == 0)result.push_back(str);
+            } else {
+                result.push_back(str);
+                str = "";
+            }
+        }
+        return result;
+    }
 
 };
 

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-
 #include "State.h"
 #include <set>
 #include <string>
@@ -11,8 +10,13 @@
 #include "Searchable.h"
 #include "AStar.h"
 #include "BestFirstSearch.h"
+#include "CacheManager.h"
+#include "FileCacheManager.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
+
 int main() {
     string line1 = "4, 2, 9, 5, 7, 0, 7, 6, 3, 7, 8";
     string line2 = "4, 0,10, 8, 1, 0, 5, 5, 7, 8, 4";
@@ -28,14 +32,27 @@ int main() {
     string line12 = "0,0";
     string line13 = "10,10";
 
-    vector<string> matrix = {line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12,line13};
-    Convertor<Searchable<pair<int, int>>*,string>* conve = new MatrixConvertor() ;
-    Searchable<pair<int, int>>* mt = new MyMatrix(matrix);
-    State<pair<int,int>>* s = new State<pair<int,int>>(3, mt->getInitialState()->getState(), NULL);
-    vector<State<pair<int, int>>*> x;
-    x=mt->getAllpossibleStates(s);
-    Searcher<string, pair<int, int>>* b = new Astar<string, pair<int, int>>();
+    vector<string> matrix = {line1, line2, line3, line4, line5, line6, line7, line8, line9, line10, line11, line12,
+                             line13};
+    Convertor<Searchable<pair<int, int>> *, string> *conve = new MatrixConvertor();
+    Searchable<pair<int, int>> *mt = new MyMatrix(matrix);
+    State<pair<int, int>> *s = new State<pair<int, int>>(3, mt->getInitialState()->getState(), nullptr);
+    vector<State<pair<int, int>> *> x;
+    x = mt->getAllpossibleStates(s);
+    Searcher<string, pair<int, int>> *b = new Astar<string, pair<int, int>>();
     string sol = b->search(mt);
+    std::ofstream o("TestIt.txt",ios::app);
+
+    CacheManager<Searchable<pair<int, int>> *, string> *cash = new FileCacheManager<Searchable<pair<int, int>> *, string>("TestIt.txt", conve);
+
+    if( cash->isExistSol(mt)){
+        string sollllo = cash->getSol(mt);
+    }
+    else{
+        cash->savePS(mt,sol);
+    }
+
+
 
 /*
     State<int> a = State<int>();
