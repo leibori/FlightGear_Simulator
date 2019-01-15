@@ -11,11 +11,11 @@ template <class T>
 class DepthFirstSearch {
     int nodesEvaluated = 0;
 public:
-    void adjustStateVectors(vector<State<T>> &visited, vector<State<T>> &neighbors) {
+    void adjustStateVectors(vector<State<T>*> &visited, vector<State<T>*> &neighbors) {
         for (int i = 0; i < visited.size(); i++) {
             for (int j = 0; j < neighbors.size(); j++) {
-                if (visited[i].equal(neighbors[j])) {
-                    if (visited[i].getCost() > neighbors[j].getCost()) {
+                if (visited[i]->equal(neighbors[j])) {
+                    if (visited[i]->getCost() > neighbors[j]->getCost()) {
                         visited.erase(visited.begin() + i);
                     } else {
                         neighbors.erase(neighbors.begin() + j);
@@ -38,9 +38,9 @@ public:
     }
 
     string search(Searchable<T> *searchable) {
-        vector<State<T>> closedStates;
-        vector<State<T>> neighbors;
-        vector<State<T>> stateStack;
+        vector<State<T>*> closedStates;
+        vector<State<T>*> neighbors;
+        vector<State<T>*> stateStack;
         State<T> *shortest = nullptr;
         double minCost;
         bool minFound = false;
@@ -48,19 +48,19 @@ public:
         nodesEvaluated = 0;
         while (!stateStack.empty()) {
             nodesEvaluated++;
-            State<T> currentState = stateStack[stateStack.size() - 1];
+            State<T> *currentState = stateStack[stateStack.size() - 1];
             stateStack.pop_back();
-            if (currentState.equal(searchable->getGoalState())) {
+            if (currentState->equal(searchable->getGoalState())) {
                 if (!minFound) {
                     minFound = true;
-                    minCost = currentState.getCost();
-                    shortest = new State<T>(currentState);
-                } else if (currentState.getCost() < minCost) {
-                    minCost = currentState.getCost();
-                    shortest = new State<T>(currentState);
+                    minCost = currentState->getCost();
+                    shortest = new State<T>(*currentState);
+                } else if (currentState->getCost() < minCost) {
+                    minCost = currentState->getCost();
+                    shortest = new State<T>(*currentState);
                 }
             } else {
-                State<T> *copy = new State<T>(currentState);
+                State<T> *copy = new State<T>(*currentState);
                 neighbors = searchable->getAllpossibleStates(copy);
                 adjustStateVectors(closedStates, neighbors);
                 adjustStateVectors(stateStack, neighbors);
