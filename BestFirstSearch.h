@@ -23,12 +23,11 @@ public:
             if (n->equal(searchable->getGoalState())) {
                 return this->backTrace(n, searchable);
             }
-            State<T> *father = new State<T>(*n);
+            auto *father = new State<T>(*n);
             vector<State<T> *> successors = searchable->getAllpossibleStates(father);
             for (auto iter = successors.begin(); iter != successors.end(); iter++) {
                 if (!closeContains(*iter, this->closed) && !this->contains(*iter)) {
                     State<T> *s = *iter;
-                    //s->setCameForm(father);
                     this->addToOpenList(s);
                 } else if (!closeContains(*iter, this->closed)) {
                     this->optionPriority(*iter);

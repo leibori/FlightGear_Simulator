@@ -13,7 +13,7 @@
 #include "CacheManager.h"
 #include "Convertor.h"
 
-//mutex write;
+mutex write;
 
 template<typename P, typename S>
 class FileCacheManager : public CacheManager<P, S> {
@@ -24,11 +24,8 @@ class FileCacheManager : public CacheManager<P, S> {
 public:
 
     FileCacheManager(const string &path, Convertor<P, S> *convertors) : path(path),
-                                                                        convertors(convertors) {
+    convertors(convertors) {
         loadFromFile();
-        /* if (!isExistSol(solution)){
-             savePS(problem,solution);
-         }*/
     }
 
 
@@ -50,7 +47,7 @@ public:
     }
 
     void savePS(P problem, S solution) override {
-        //      write.lock();
+              write.lock();
         /* Create file . */
         ofstream dataFile(this->path, ios::app);
 
@@ -63,7 +60,7 @@ public:
 
         /* Close file. */
         dataFile.close();
-        //    write.unlock();
+        write.unlock();
     }
 
     S getSol(P problem) override {
