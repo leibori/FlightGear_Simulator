@@ -1,5 +1,13 @@
 #include <iostream>
 #include <string>
+
+#include "MyParallelServer.h"
+#include "ClientHandler.h"
+#include "MyTestClientHandler.h"
+#include "Convertor.h"
+#include "CacheManager.h"
+#include "FileCacheManager.h"
+
 #include "State.h"
 #include <set>
 #include <string>
@@ -12,13 +20,34 @@
 #include "BestFirstSearch.h"
 #include "CacheManager.h"
 #include "FileCacheManager.h"
+#include "DepthFirstSearch.h"
+#include "BreadthFirstSearch.h"
+
 #include <iostream>
 #include <fstream>
 
 using namespace std;
 
 int main() {
-    string line1 = "4, 2, 9, 5, 7, 0, 7, 6, 3, 7, 8";
+
+    Server<Searchable<pair<int, int>>*, string> *parallelServer = new
+            MyParallelServer<Searchable<pair<int, int>>*, string>();
+    Convertor<Searchable<pair<int, int>>*, string>* convertor = new MatrixConvertor();
+    CacheManager<Searchable<pair<int, int>>*, string> *manager = new FileCacheManager<Searchable<pair<int, int>>*, string>("problemCache.txt", convertor);
+    Solver<Searchable<pair<int, int>>*, string>* solver = new MatrixSearchableSolver<Searchable<pair<int, int>>*, string>();
+    ClientHandler<Searchable<pair<int, int>>*, string>* handler = new MyTestClientHandler<Searchable<pair<int,
+            int>>*, string>(convertor, solver, manager);
+
+    parallelServer->open(5400, handler);
+    parallelServer->stop();
+
+    delete handler;
+    delete manager;
+    delete convertor;
+    delete parallelServer;
+
+
+    /*string line1 = "4, 2, 9, 5, 7, 0, 7, 6, 3, 7, 8";
     string line2 = "4, 0,10, 8, 1, 0, 5, 5, 7, 8, 4";
     string line3 = "4, 5, 2, 8, 1, 1, 9, 3, 3, 0, 7";
     string line4 = "3, 3, 6, 2, 8, 9, 6, 8, 3, 5, 7";
@@ -36,7 +65,16 @@ int main() {
                              line13};
     Convertor<Searchable<pair<int, int>> *, string> *conve = new MatrixConvertor();
     Searchable<pair<int, int>> *mt = new MyMatrix(matrix);
-    State<pair<int, int>> *s = new State<pair<int, int>>(3, mt->getInitialState()->getState(), nullptr);
+
+    DepthFirstSearch<pair<int,int>> *dfs = new DepthFirstSearch<pair<int,int>>();
+    cout << dfs->search(mt) << endl;
+    cout << dfs->getNodesEvaluated() << endl;
+
+    BreadthFirstSearch<pair<int,int>> *bfs = new BreadthFirstSearch<pair<int,int>>();
+    cout << bfs->search(mt) << endl;
+    cout << bfs->getNodesEvaluated() << endl;*/
+
+    /*State<pair<int, int>> *s = new State<pair<int, int>>(3, mt->getInitialState()->getState(), nullptr);
     vector<State<pair<int, int>> *> x;
     x = mt->getAllpossibleStates(s);
     Searcher<string, pair<int, int>> *b = new Astar<string, pair<int, int>>();
@@ -53,6 +91,14 @@ int main() {
     }
 
 
+    vector<string> matrix = {line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12,line13};
+    Convertor<Searchable<pair<int, int>>*,string>* conve = new MatrixConvertor() ;
+    Searchable<pair<int, int>>* mt = new MyMatrix(matrix);
+    State<pair<int,int>>* s = new State<pair<int,int>>(3, mt->getInitialState()->getState(), NULL);
+    vector<State<pair<int, int>>*> x;
+    x=mt->getAllpossibleStates(s);
+    Searcher<string, pair<int, int>>* b = new Astar<string, pair<int, int>>();
+    string sol = b->search(mt);*/
 
 /*
     State<int> a = State<int>();
@@ -63,13 +109,11 @@ int main() {
     b.setCost(4);
     c.setCost(50);
     d.setCost(75);
-
     set<State<int>,CompareCost<int>> ss;
     ss.insert(a);
     ss.insert(b);
     ss.insert(c);
     ss.insert(d);
-
     while (!ss.empty())
     {
         auto it = ss.begin();

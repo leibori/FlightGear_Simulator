@@ -5,6 +5,7 @@
 #ifndef SOLIDPROJECT_EX2_FILECACHEMANAGER_H
 #define SOLIDPROJECT_EX2_FILECACHEMANAGER_H
 
+#include <vector>
 #include <string>
 #include <unordered_map>
 #include <fstream>
@@ -13,14 +14,13 @@
 #include "CacheManager.h"
 #include "Convertor.h"
 
-//mutex write;
 
 template<typename P, typename S>
 class FileCacheManager : public CacheManager<P, S> {
     string path;
     Convertor<P, S> *convertors;
     unordered_map <string, string> allPS;
-
+    pthread_mutex_t mutex;
 public:
 
     FileCacheManager(const string &path, Convertor<P, S> *convertors) : path(path),
@@ -50,7 +50,7 @@ public:
     }
 
     void savePS(P problem, S solution) override {
-        //      write.lock();
+        pthread_mutex_lock(&mutex);
         /* Create file . */
         ofstream dataFile(this->path, ios::app);
 
@@ -63,7 +63,7 @@ public:
 
         /* Close file. */
         dataFile.close();
-        //    write.unlock();
+        pthread_mutex_unlock(&mutex);
     }
 
     S getSol(P problem) override {

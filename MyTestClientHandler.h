@@ -11,7 +11,7 @@
 #include "Solver.h"
 #include "CacheManager.h"
 #include "MyMatrix.h"
-#include "SearchableSolver.h"
+#include "MatrixSearchableSolver.h"
 
 using namespace std;
 
@@ -41,10 +41,10 @@ public:
             do {
                 bzero(buffer, 2);
                 line = "";
-                ssize_t bytes_read;
+                int bytesRead;
                 do {
-                    bytes_read = read(socket, buffer, 1);
-                    if (bytes_read < 0) {
+                    bytesRead = read(socket, buffer, 1);
+                    if (bytesRead < 0) {
                         __throw_bad_exception();
                     }
                     line += buffer[0];
@@ -71,13 +71,14 @@ public:
             if (cacheManager->isExistProb(convertedProblem)) {
                 solution = cacheManager->getSol(convertedProblem);
             } else {
-                solution = solver->solve(problem);
+                solution = solver->solve(convertedProblem);
             }
             convertedSolution = convertor->conSolvToString(solution);
             if (write(socket, convertedSolution.c_str(), (int)(convertedSolution.length())) < 0) {
                 throw "error writing data to socket";
             }
         }
+        close(socket);
     }
 };
 
