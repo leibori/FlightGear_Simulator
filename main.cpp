@@ -12,6 +12,8 @@
 #include "BestFirstSearch.h"
 #include "CacheManager.h"
 #include "FileCacheManager.h"
+#include "BreadthFirstSearch.h"
+#include "DepthFirstSearch.h"
 #include <iostream>
 #include <fstream>
 
@@ -39,8 +41,10 @@ int main() {
     State<pair<int, int>> *s = new State<pair<int, int>>(3, mt->getInitialState()->getState(), nullptr);
     vector<State<pair<int, int>> *> x;
     x = mt->getAllpossibleStates(s);
-    Searcher<string, pair<int, int>> *b = new Astar<string, pair<int, int>>();
+    //Searcher<string, pair<int, int>> *b = new Astar<string, pair<int, int>>();
+    Searcher<string,pair<int, int>> *b = new BreadthFirstSearch<string,pair<int, int>>();
     string sol = b->search(mt);
+    int yupido = b->getNumberOfNodesEvaluate();
     std::ofstream o("TestIt.txt",ios::app);
 
     CacheManager<Searchable<pair<int, int>> *, string> *cash = new FileCacheManager<Searchable<pair<int, int>> *, string>("TestIt.txt", conve);

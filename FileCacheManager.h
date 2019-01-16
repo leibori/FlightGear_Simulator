@@ -80,7 +80,6 @@ public:
         string prob;
         string solu;
         ifstream data(this->path);
-        stringstream stringstream1;
         string buffer;
 
         if (!data.good()) {
@@ -89,9 +88,7 @@ public:
         vector<string> vector;
         /* Read a line from file. */
         while (std::getline(data, buffer)) {
-//            stringstream1.str(buffer);
             vector = splitIt(buffer, "$");
-
             allPS[vector[0]] = vector[1];
         }
 

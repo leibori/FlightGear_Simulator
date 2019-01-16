@@ -1,14 +1,14 @@
 #ifndef SOLIDPROJECT_EX2_DEPTHFIRSTSEARCH_H
 #define SOLIDPROJECT_EX2_DEPTHFIRSTSEARCH_H
-
 #include <vector>
 #include <string>
 
 #include "Searchable.h"
 #include "State.h"
+#include "Searcher.h"
 
-template <class T>
-class DepthFirstSearch {
+template <class S, class T>
+class DepthFirstSearch : public Searcher<S, T>{
     int nodesEvaluated = 0;
 public:
     void adjustStateVectors(vector<State<T>*> &visited, vector<State<T>*> &neighbors) {
@@ -37,7 +37,7 @@ public:
         return directions.substr(0,directions.length() - 1);
     }
 
-    string search(Searchable<T> *searchable) {
+    S search(Searchable<T> *searchable) override {
         vector<State<T>*> closedStates;
         vector<State<T>*> neighbors;
         vector<State<T>*> stateStack;
@@ -73,7 +73,8 @@ public:
         return makeDirections(shortest);
     }
 
-    int getNodesEvaluated() const { return nodesEvaluated; }
+    int getNumberOfNodesEvaluate() override {
+        return nodesEvaluated;
+    }
 };
-
 #endif //SOLIDPROJECT_EX2_BREADTHFIRSTSEARCH_H

@@ -31,7 +31,7 @@ public:
                     //s->setCameForm(father);
                     this->addToOpenList(s);
                 } else if (!closeContains(*iter, this->closed)) {
-                    this->optionMinimum(*iter);
+                    this->optionPriority(*iter);
                 }
             }
         }
