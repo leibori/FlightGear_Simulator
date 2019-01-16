@@ -16,6 +16,7 @@ class Astar : public InCommonSearcher<S,T>   {
 public:
     S search(Searchable<T> *searchable) override {
         this->openList.clear();
+        this->evaluatedNodes =0;
         this->addToOpenList(searchable->getInitialState());
         while (this->getOpenListSize() > 0) {
             State<T> *n = this->popOpenList();
