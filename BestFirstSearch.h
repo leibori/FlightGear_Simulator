@@ -16,6 +16,7 @@ template<class S, class T>
 class BestFirstSearch : public InCommonSearcher<S, T> {
 public:
     S search(Searchable<T> *searchable) override {
+        this->openList.clear();
         this->addToOpenList(searchable->getInitialState());
         while (this->getOpenListSize() > 0) {
             State<T> *n = this->popOpenList();

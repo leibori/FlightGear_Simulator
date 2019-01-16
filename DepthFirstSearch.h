@@ -28,16 +28,24 @@ public:
         }
     }
 
-    string makeDirections(State<T> *currentState) {
-        string directions = "";
-        if (currentState == nullptr) {
-            return "No path available";
+    string makeDirections(State<T> *currentState,Searchable<T> *searchable) {
+        this->openList.clear();
+        vector<string> path;
+        string toReturn;
+        State<T> *startState = searchable->getInitialState();
+        State<T> *current = currentState;
+        while (!(current->equal(startState))) {
+            path.push_back(current->getDirection());
+            current = current->getCameForm();
         }
-        while (currentState->getCameForm() != nullptr) {
-            directions = currentState->getDirection() + "," + directions;
-            currentState = currentState->getCameForm();
+        reverse(path.begin(), path.end());
+        for (auto i : path) {
+            toReturn.append(i);
+            toReturn.append(",");
         }
-        return directions.substr(0,directions.length() - 1);
+        string st = toReturn.substr(0, toReturn.size() - 1);
+        return st;
+
     }
 
     S search(Searchable<T> *searchable) override {
@@ -50,7 +58,7 @@ public:
             }
 
             if (state->equal(searchable->getGoalState())){
-                return makeDirections(state);
+                return makeDirections(state,searchable);
             }
               //  return this->backTrace(state, searchable);
 
