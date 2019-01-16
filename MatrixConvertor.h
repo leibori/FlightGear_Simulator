@@ -10,6 +10,7 @@
 #include "Searchable.h"
 using namespace std;
 class MatrixConvertor : public Convertor <Searchable<pair<int, int>>* ,string>{
+    vector<Searchable<pair<int, int>>*>garbagePointers;
 public:
     MatrixConvertor();
 
@@ -20,6 +21,8 @@ public:
     string conSolvToString(string solve) override;
 
     string conStringToSol(string solve) override;
+
+    virtual ~MatrixConvertor();
 
 private:
 //split by specific token

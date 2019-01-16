@@ -91,7 +91,6 @@ public:
 
         data.close();
     }
-
 private:
     bool is_empty(const string &pFile) {
         ifstream data;

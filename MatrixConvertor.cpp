@@ -6,6 +6,7 @@
 
 Searchable<pair<int, int>>* MatrixConvertor::conVecStringToProblem(vector<string> pro) {
     MyMatrix *matrix = new MyMatrix(pro);
+    this->garbagePointers.push_back(matrix);
     return matrix;
 }
 
@@ -42,6 +43,14 @@ vector<string>MatrixConvertor:: splitIt(string str, string token) {
         }
     }
     return result;
+}
+
+MatrixConvertor::~MatrixConvertor() {
+    for(auto run :this->garbagePointers){
+        if(run != nullptr){
+            delete run;
+        }
+    }
 }
 
 MatrixConvertor::MatrixConvertor() = default;

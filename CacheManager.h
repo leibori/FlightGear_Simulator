@@ -13,6 +13,9 @@ public:
     virtual bool isExistProb(const P &pob) const =0;
     virtual void savePS(P problem, S solution) = 0;
     virtual string getSol(P problem) = 0;
+
+    virtual ~CacheManager() = default;
+
     virtual void loadFromFile() = 0;
 };
 #endif //SOLIDPROJECT_EX2_CACHEMANAGER_H

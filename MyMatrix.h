@@ -14,6 +14,7 @@ using namespace std;
 class MyMatrix : public Searchable<pair<int,int>>{
     vector<vector<int>> matrix;
     vector<string> original;
+    vector<State<pair<int, int>>*> garbagePointers;
     int length;
     int width;
     pair<int, int> initState;
@@ -30,6 +31,8 @@ class MyMatrix : public Searchable<pair<int,int>>{
     vector<State<pair<int,int>>*> getAllpossibleStates( State<pair<int, int>> *s) override;
 
     vector<string> getOriginalVector() override;
+
+    virtual ~MyMatrix();
 
 private:
     vector<string>splitIt(string str, string token);

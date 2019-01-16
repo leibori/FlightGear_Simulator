@@ -23,6 +23,7 @@ public:
 
     virtual vector <string> getOriginalVector()=0;
 
+    virtual ~Searchable() {}
 
 };
 

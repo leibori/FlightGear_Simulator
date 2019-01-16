@@ -5,7 +5,6 @@
 #include "MyMatrix.h"
 
 MyMatrix::MyMatrix(vector<string> getIt) {
-
     vector<string> start = splitIt(getIt[getIt.size()-2],",");
     vector<string >end=  splitIt(getIt[getIt.size()-1],",");
     this->initState =  std::make_pair(stoi(start[0]), stoi(start[1]));
@@ -59,10 +58,13 @@ vector<State<pair<int, int>>*> MyMatrix::getAllpossibleStates(State<pair<int, in
         if (s->getDirection() != "none") {
             if (!upState->equal(s->getCameForm()) && (matrix[i - 1][j] != -1)) {
                 statesPosi.push_back(upState);
+                this->garbagePointers.push_back(upState);
             }
         } else {
             if (matrix[i - 1][j] != -1) {
                 statesPosi.push_back(upState);
+                this->garbagePointers.push_back(upState);
+
             }
         }
 
@@ -76,10 +78,12 @@ vector<State<pair<int, int>>*> MyMatrix::getAllpossibleStates(State<pair<int, in
         if (s->getDirection() != "none") {
             if (!downState->equal(s->getCameForm()) && (matrix[i + 1][j] != -1)) {
                 statesPosi.push_back(downState);
+                this->garbagePointers.push_back(downState);
             }
         } else {
             if (matrix[i + 1][j] != -1) {
                 statesPosi.push_back(downState);
+                this->garbagePointers.push_back(downState);
             }
         }
     }
@@ -92,10 +96,12 @@ vector<State<pair<int, int>>*> MyMatrix::getAllpossibleStates(State<pair<int, in
         if (s->getDirection() != "none") {
             if (!leftState->equal(s->getCameForm()) && (matrix[i][j - 1] != -1)) {
                 statesPosi.push_back(leftState);
+                this->garbagePointers.push_back(leftState);
             }
         } else {
             if (matrix[i][j - 1] != -1) {
                 statesPosi.push_back(leftState);
+                this->garbagePointers.push_back(leftState);
             }
         }
     }
@@ -108,10 +114,12 @@ vector<State<pair<int, int>>*> MyMatrix::getAllpossibleStates(State<pair<int, in
         if (s->getDirection() != "none") {
             if (!rightState->equal(s->getCameForm()) && (matrix[i][j + 1] != -1)) {
                 statesPosi.push_back(rightState);
+                this->garbagePointers.push_back(rightState);
             }
         } else {
             if (matrix[i][j + 1] != -1) {
                 statesPosi.push_back(rightState);
+                this->garbagePointers.push_back(rightState);
             }
         }
     }
@@ -137,6 +145,14 @@ vector<string>MyMatrix:: splitIt(string str, string token) {
 
 vector<string> MyMatrix::getOriginalVector() {
     return original;
+}
+
+MyMatrix::~MyMatrix() {
+    for(auto run :this->garbagePointers){
+        if(run != nullptr){
+            delete run;
+        }
+    }
 }
 
 

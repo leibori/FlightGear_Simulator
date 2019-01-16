@@ -34,7 +34,7 @@ public:
     virtual S conStringToSol(string solve) = 0;
 
 
-
+    virtual ~Convertor() = default;;
 
 };
 

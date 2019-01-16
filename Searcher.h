@@ -13,6 +13,8 @@ public:
     virtual S search(Searchable<T>* searchable) = 0;
 
     virtual int getNumberOfNodesEvaluate() = 0;
+
+    virtual ~Searcher() = default;
 };
 
 #endif //SOLIDPROJECT_EX2_SEARCHER_H
