@@ -5,6 +5,7 @@
 #ifndef SOLIDPROJECT_EX2_FILECACHEMANAGER_H
 #define SOLIDPROJECT_EX2_FILECACHEMANAGER_H
 
+#include <vector>
 #include <string>
 #include <unordered_map>
 #include <fstream>
@@ -13,19 +14,21 @@
 #include "CacheManager.h"
 #include "Convertor.h"
 
-mutex write;
 
 template<typename P, typename S>
 class FileCacheManager : public CacheManager<P, S> {
     string path;
     Convertor<P, S> *convertors;
     unordered_map <string, string> allPS;
-
+    pthread_mutex_t mutex;
 public:
 
     FileCacheManager(const string &path, Convertor<P, S> *convertors) : path(path),
-    convertors(convertors) {
+                                                                        convertors(convertors) {
         loadFromFile();
+        /* if (!isExistSol(solution)){
+             savePS(problem,solution);
+         }*/
     }
 
 
@@ -47,7 +50,7 @@ public:
     }
 
     void savePS(P problem, S solution) override {
-              write.lock();
+        pthread_mutex_lock(&mutex);
         /* Create file . */
         ofstream dataFile(this->path, ios::app);
 
@@ -60,7 +63,7 @@ public:
 
         /* Close file. */
         dataFile.close();
-        write.unlock();
+        pthread_mutex_unlock(&mutex);
     }
 
     S getSol(P problem) override {
@@ -77,6 +80,7 @@ public:
         string prob;
         string solu;
         ifstream data(this->path);
+        stringstream stringstream1;
         string buffer;
 
         if (!data.good()) {
@@ -85,7 +89,9 @@ public:
         vector<string> vector;
         /* Read a line from file. */
         while (std::getline(data, buffer)) {
+//            stringstream1.str(buffer);
             vector = splitIt(buffer, "$");
+
             allPS[vector[0]] = vector[1];
         }
 
