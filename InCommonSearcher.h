@@ -12,9 +12,9 @@
 using namespace std;
 template <class S, class TforState>
 class InCommonSearcher : public Searcher<S, TforState>{
-    int evaluatedNodes;
 protected:
     std::multiset<State<TforState>*,CompForMult<TforState>> openList;
+    int evaluatedNodes;
     vector<State<TforState>*> closed;
 public:
     InCommonSearcher() : evaluatedNodes(0) {};
