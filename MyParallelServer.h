@@ -25,7 +25,7 @@ public:
         pthread_t pthread;
         pthread_create(&pthread, nullptr, MyParallelServer::openServerThread, (void*)(commArgs));
         threads.push_back(pthread);
-        this_thread::sleep_for(chrono::milliseconds(100000));
+        //this_thread::sleep_for(chrono::milliseconds(100000));
     }
 
     static void* openServerThread(void* commArgs) {
@@ -70,12 +70,11 @@ public:
                 if (*shouldStop) {
                     break;
                 }
-                continue;
-                /*if (errno == EWOULDBLOCK) {
+                if (errno == EWOULDBLOCK) {
                     continue;
                 }
                 perror("ERROR on accept");
-                exit(1);*/
+                exit(1);
             }
 
             auto commArgs = new ParallelClientArgs<P,S>(newsockfd, clientHandler);

@@ -32,7 +32,7 @@ public:
         string line, convertedSolution;
         vector<string> problem;
         char buffer[2];
-        bool isFirstLine, stop = false;
+        bool isFirstLine, stop = false, foundInFile = true;
         int dataLines, lineIndex;
         while (true) {
             dataLines = 3;
@@ -45,6 +45,9 @@ public:
                 do {
                     bytesRead = read(socket, buffer, 1);
                     if (bytesRead < 0) {
+                        if (errno == EWOULDBLOCK) {
+                            continue;
+                        }
                         __throw_bad_exception();
                     }
                     line += buffer[0];
@@ -61,7 +64,7 @@ public:
                     }
                     problem.clear();
                 }
-                problem.push_back(line);
+                problem.push_back(line.substr(0, line.size() - 1));
                 lineIndex++;
             } while (lineIndex != dataLines);
             if (stop) {
@@ -72,8 +75,12 @@ public:
                 solution = cacheManager->getSol(convertedProblem);
             } else {
                 solution = solver->solve(convertedProblem);
+                foundInFile = false;
             }
             convertedSolution = convertor->conSolvToString(solution);
+            if (!foundInFile) {
+                cacheManager->savePS(convertedProblem, convertedSolution);
+            }
             if (write(socket, convertedSolution.c_str(), (int)(convertedSolution.length())) < 0) {
                 throw "error writing data to socket";
             }

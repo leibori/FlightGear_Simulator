@@ -20,7 +20,7 @@ class FileCacheManager : public CacheManager<P, S> {
     string path;
     Convertor<P, S> *convertors;
     unordered_map <string, string> allPS;
-    pthread_mutex_t mutex;
+    mutex mtx;
 public:
 
     FileCacheManager(const string &path, Convertor<P, S> *convertors) : path(path),
@@ -50,7 +50,7 @@ public:
     }
 
     void savePS(P problem, S solution) override {
-        pthread_mutex_lock(&mutex);
+        mtx.lock();
         /* Create file . */
         ofstream dataFile(this->path, ios::app);
 
@@ -63,7 +63,7 @@ public:
 
         /* Close file. */
         dataFile.close();
-        pthread_mutex_unlock(&mutex);
+        mtx.unlock();
     }
 
     S getSol(P problem) override {
