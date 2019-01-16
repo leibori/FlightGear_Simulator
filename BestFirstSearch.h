@@ -17,6 +17,7 @@ class BestFirstSearch : public InCommonSearcher<S, T> {
 public:
     S search(Searchable<T> *searchable) override {
         this->openList.clear();
+        this->closed.clear();
         this->evaluatedNodes =0;
         this->addToOpenList(searchable->getInitialState());
         while (this->getOpenListSize() > 0) {
