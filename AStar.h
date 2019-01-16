@@ -15,6 +15,7 @@ template<class S, class T>
 class Astar : public InCommonSearcher<S,T>   {
 public:
     S search(Searchable<T> *searchable) override {
+        this->openList.clear();
         this->addToOpenList(searchable->getInitialState());
         while (this->getOpenListSize() > 0) {
             State<T> *n = this->popOpenList();
@@ -39,7 +40,7 @@ public:
                     }
                     this->addToOpenList(s);
                 } else if (!closeContains(*iter, this->closed)) {
-                    this->optionMinimum(*iter);
+                    this->optionPriority(*iter);
                 }
             }
         }

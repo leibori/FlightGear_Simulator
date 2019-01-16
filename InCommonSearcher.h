@@ -12,9 +12,9 @@
 using namespace std;
 template <class S, class TforState>
 class InCommonSearcher : public Searcher<S, TforState>{
-    int evaluatedNodes;
 protected:
     std::multiset<State<TforState>*,CompForMult<TforState>> openList;
+    int evaluatedNodes;
     vector<State<TforState>*> closed;
 public:
     InCommonSearcher() : evaluatedNodes(0) {};
@@ -33,7 +33,6 @@ protected:
         vector<string> path;
         string toReturn;
         State<TforState> *startState = searchable->getInitialState();
-        //State<TforState> *current = new State<TforState>(s.getState(), s.getCost(), s.getCameFrom(), s.getCameFromDir());
         State<TforState> *current = s;
         while (!(current->equal(startState))) {
             path.push_back(current->getDirection());
@@ -48,13 +47,14 @@ protected:
         return st;
 
     }
-    void optionMinimum(State<TforState> *currState) {
+    void optionPriority(State<TforState> *currState) {
         for (auto it = openList.begin(); it != openList.end(); it++) {
             State<TforState> *s = *it;
             if (s->equal(currState)) {
                 if (currState->getCost() < s->getCost()) {
                     this->openList.erase(it);
-                    s->setCameForm(currState->getCameForm());
+                    State<TforState> *came = currState->getCameForm();
+                    s->setCameForm(came);
                     this->addToOpenList(currState);
                 }
                 return;

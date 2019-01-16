@@ -4,14 +4,15 @@
 #include <vector>
 #include <string>
 
+#include "Searcher.h"
 #include "Searchable.h"
 #include "State.h"
 
-template <class T>
-class BreadthFirstSearch {
+template<class S, class T>
+class BreadthFirstSearch : public Searcher<S, T> {
     int nodesEvaluated = 0;
 public:
-    void adjustStateVectors(vector<State<T>*> &visited, vector<State<T>*> &neighbors) {
+    void adjustStateVectors(vector<State<T> *> &visited, vector<State<T> *> &neighbors) {
         for (int i = 0; i < visited.size(); i++) {
             for (int j = 0; j < neighbors.size(); j++) {
                 if (visited[i]->equal(neighbors[j])) {
@@ -34,13 +35,13 @@ public:
             directions = currentState->getDirection() + "," + directions;
             currentState = currentState->getCameForm();
         }
-        return directions.substr(0,directions.length() - 1);
+        return directions.substr(0, directions.length() - 1);
     }
 
-    string search(Searchable<T> *searchable) {
-        vector<State<T>*> closedStates;
-        vector<State<T>*> neighbors;
-        vector<State<T>*> stateQueue;
+    S search(Searchable<T> *searchable) override {
+        vector<State<T> *> closedStates;
+        vector<State<T> *> neighbors;
+        vector<State<T> *> stateQueue;
         State<T> *shortest = nullptr;
         double minCost;
         bool minFound = false;
@@ -71,9 +72,12 @@ public:
             closedStates.push_back(currentState);
         }
         return makeDirections(shortest);
+
     }
 
-    int getNodesEvaluated() const { return nodesEvaluated; }
+    int getNumberOfNodesEvaluate() override {
+        return nodesEvaluated;
+    }
 };
 
 #endif //SOLIDPROJECT_EX2_BREADTHFIRSTSEARCH_H
